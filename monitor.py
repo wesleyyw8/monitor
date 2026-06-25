@@ -1,0 +1,65 @@
+import requests
+import yfinance as yf
+
+# PARAMÊTROS DO SEU CANAL
+TELEGRAM_TOKEN = "8746372216:AAEWxeJnWj6sHrbMyS6OoYoJMT8PXQjGgXo"
+CHAT_ID = "6368924019"
+
+# BANCO DE DADOS (PETR4 alterada para 40.00 para forçar o disparo no teste)
+CARTEIRA = {
+    "PETR4.SA": 31.00,   
+    "TAEE11.SA": 31.50,  
+    "VALE3.SA": 55.00,   
+    "BBAS3.SA": 18.20,   
+    "BBSE3.SA": 29.50,   
+    "SAPR4.SA": 5.10,    
+    "CPLE3.SA": 14.00,    
+    "VIVT3.SA": 29.80,   
+    "TRPL4.SA": 22.50,   
+    "EGIE3.SA": 32.50,   
+}
+
+def enviar_mensagem_telegram(mensagem):
+    url = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage"
+    payload = {"chat_id": CHAT_ID, "text": mensagem, "parse_mode": "Markdown"}
+    try:
+        response = requests.post(url, json=payload)
+        if response.status_code != 200:
+            print(f"Erro ao enviar Telegram: {response.text}")
+    except Exception as e:
+        print(f"Erro de conexão: {e}")
+
+def monitorar_mercado():
+    print("Iniciando varredura de mercado...")
+    alertas_disparados = []
+    
+    tickers_symbols = list(CARTEIRA.keys())
+    dados_mercado = yf.download(tickers_symbols, period="1d", interval="1m", progress=False)
+    
+    for ticker, preco_teto in CARTEIRA.items():
+        try:
+            preco_atual = dados_mercado['Close'][ticker].iloc[-1]
+            preco_atual = round(float(preco_atual), 2)
+            
+            print(f"{ticker}: Atual R$ {preco_atual} | Alerta se for <= R$ {preco_teto}")
+            
+            if preco_atual <= preco_teto:
+                ticker_limpo = ticker.replace(".SA", "")
+                alertas_disparados.append(
+                    f"🚨 *{ticker_limpo}* entrou em ponto de compra!\n"
+                    f"Preço Atual: R$ {preco_atual}\n"
+                    f"Seu Preço Teto: R$ {preco_teto}\n"
+                    f"Link: [C6 Bank](https://www.c6bank.com.br/)"
+                )
+        except Exception as e:
+            print(f"Erro ao processar {ticker}: {e}")
+            
+    if alertas_disparados:
+        mensagem_final = "🔥 *RADAR DE INVESTIMENTOS* 🔥\n\n" + "\n---\n".join(alertas_disparados)
+        enviar_mensagem_telegram(mensagem_final)
+        print("Alertas enviados para o Telegram.")
+    else:
+        print("Varredura concluída. Nenhum ativo no preço.")
+
+if __name__ == "__main__":
+    monitorar_mercado()
