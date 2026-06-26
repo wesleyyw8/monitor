@@ -1,0 +1,30 @@
+name: Monitor de Mercado Automático
+
+on:
+  schedule:
+    # Roda de hora em hora (no minuto 0), de segunda a sexta-feira.
+    # O GitHub usa o horário UTC (3 horas à frente de Brasília).
+    # Das 13:00 UTC até as 21:00 UTC equivale a 10:00 até 18:00 no Brasil.
+    - cron: '0 13-21 * * 1-5'
+  workflow_dispatch: # Abre um botão para você testar manualmente quando quiser
+
+jobs:
+  executar-monitor:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Baixar o código do repositório
+      uses: actions/checkout@v4
+
+    - name: Configurar o Python na nuvem
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+
+    - name: Instalar as bibliotecas necessárias
+      run: |
+        python -m pip install --upgrade pip
+        pip install requests yfinance
+
+    - name: Rodar o Script de Monitoramento
+      run: python monitor.py
