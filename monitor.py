@@ -5,18 +5,18 @@ import yfinance as yf
 TELEGRAM_TOKEN = "8746372216:AAEWxeJnWj6sHrbMyS6OoYoJMT8PXQjGgXo"
 CHAT_ID = "6368924019"
 
-# BANCO DE DADOS (PETR4 alterada para 40.00 para forçar o disparo no teste)
+# BANCO DE DADOS
 CARTEIRA = {
-    "PETR4.SA": 31.00,   
-    "TAEE11.SA": 31.50,  
-    "VALE3.SA": 55.00,   
-    "BBAS3.SA": 18.20,   
-    "BBSE3.SA": 29.50,   
-    "SAPR4.SA": 5.10,    
-    "CPLE3.SA": 14.00,    
-    "VIVT3.SA": 29.80,   
-    "TRPL4.SA": 22.50,   
-    "EGIE3.SA": 32.50,   
+    "PETR4.SA": 31.00,
+    "TAEE11.SA": 31.50,
+    "VALE3.SA": 58.00,
+    "BBAS3.SA": 20.00,
+    "BBSE3.SA": 29.50,
+    "SAPR4.SA": 5.10,
+    "CPLE3.SA": 14.00,
+    "VIVT3.SA": 31.50,
+    "TRPL4.SA": 22.50,
+    "EGIE3.SA": 34.00,
 }
 
 def enviar_mensagem_telegram(mensagem):
