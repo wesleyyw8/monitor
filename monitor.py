@@ -17,8 +17,9 @@ CARTEIRA = {
     "VIVT3.SA": 31.50,
     "TRPL4.SA": 22.50,
     "EGIE3.SA": 34.00,
-    "GGRC11.SA": 9.50,
-    "GARE11.SA": 8.20,
+    "GARE11.SA": 8.15,  # Alinhado com o preço promocional de R$ 8,13
+    "MXRF11.SA": 10.00,
+    "GGRC11": 9.72
 }
 
 def enviar_mensagem_telegram(mensagem):
