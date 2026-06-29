@@ -9,7 +9,7 @@ CHAT_ID = "6368924019"
 CARTEIRA = {
     "PETR4.SA": 31.00,
     "TAEE11.SA": 31.50,
-    "VALE3.SA": 58.00,
+    "VALE3.SA": 80.00,
     "BBAS3.SA": 20.00,
     "BBSE3.SA": 29.50,
     "SAPR4.SA": 5.10,
