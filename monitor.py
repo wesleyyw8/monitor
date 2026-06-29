@@ -6,23 +6,24 @@ TELEGRAM_TOKEN = "8746372216:AAEWxeJnWj6sHrbMyS6OoYoJMT8PXQjGgXo"
 CHAT_ID = "6368924019"
 
 # BANCO DE DADOS
+# BANCO DE DADOS (Preços-teto atualizados com margem de segurança realista)
 CARTEIRA = {
-    "PETR4.SA": 31.00,
-    "TAEE11.SA": 31.50,
-    "VALE3.SA": 70.00,
-    "BBAS3.SA": 20.00,
-    "BBSE3.SA": 29.50,
-    "SAPR4.SA": 5.10,
-    "CPLE3.SA": 14.00,
-    "VIVT3.SA": 31.50,
-    "TRPL4.SA": 22.50,
-    "EGIE3.SA": 34.00,
-    "GARE11.SA": 8.15,
+    "PETR4.SA": 35.50, 
+    "TAEE11.SA": 37.00,
+    "VALE3.SA": 79.00, 
+    "BBAS3.SA": 20.30, 
+    "BBSE3.SA": 35.00, 
+    "SAPR4.SA": 5.10,  
+    "CPLE3.SA": 14.00, 
+    "VIVT3.SA": 31.50, 
+    "TRPL4.SA": 23.50, 
+    "EGIE3.SA": 34.00, 
+    "GARE11.SA": 8.15, 
     "MXRF11.SA": 10.00,
-    "GGRC11.SA": 9.72,   
-    "CMIG4.SA": 10.80,
-    "CURY3.SA": 32.50,   
-    "DIRR3.SA": 13.80    
+    "GGRC11.SA": 9.85, 
+    "CMIG4.SA": 11.00, 
+    "CURY3.SA": 32.50, 
+    "DIRR3.SA": 14.30  
 }
 
 def enviar_mensagem_telegram(mensagem):
