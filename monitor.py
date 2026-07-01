@@ -11,19 +11,19 @@ CARTEIRA = {
     "PETR4.SA": 35.50, 
     "TAEE11.SA": 35.00,
     "VALE3.SA": 77.00, 
-    "BBAS3.SA": 20.30, 
+    "BBAS3.SA": 19.60, 
     "BBSE3.SA": 35.00, 
     "SAPR4.SA": 5.10,  
     "CPLE3.SA": 14.00, 
     "VIVT3.SA": 31.50, 
     "TRPL4.SA": 23.50, 
-    "EGIE3.SA": 34.00, 
-    "GARE11.SA": 8.15, 
-    "MXRF11.SA": 9.90,
+    "EGIE3.SA": 33.55, 
+    "GARE11.SA": 8.10, 
+    "MXRF11.SA": 9.70,
     "GGRC11.SA": 9.85, 
-    "CMIG4.SA": 11.00, 
+    "CMIG4.SA": 10.60, 
     "CURY3.SA": 32.50, 
-    "DIRR3.SA": 14.30  
+    "DIRR3.SA": 13.70  
 }
 
 def enviar_mensagem_telegram(mensagem):
