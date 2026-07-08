@@ -1,29 +1,28 @@
 import requests
 import yfinance as yf
 
-# PARAMÊTROS DO SEU CANAL
 TELEGRAM_TOKEN = "8746372216:AAEWxeJnWj6sHrbMyS6OoYoJMT8PXQjGgXo"
 CHAT_ID = "6368924019"
 
-# BANCO DE DADOS
-# BANCO DE DADOS (Preços-teto atualizados com margem de segurança realista)
 CARTEIRA = {
-    "PETR4.SA": 35.50, 
-    "TAEE11.SA": 35.00,
-    "VALE3.SA": 77.00, 
-    "BBAS3.SA": 19.60, 
-    "BBSE3.SA": 35.00, 
-    "SAPR4.SA": 5.10,  
-    "CPLE3.SA": 14.00, 
-    "VIVT3.SA": 31.50, 
-    "TRPL4.SA": 23.50, 
-    "EGIE3.SA": 33.55, 
+    "BBAS3.SA": 29.16,
+    "CMIG4.SA": 12.85,
+    "SAPR4.SA": 9.50,
+    "BBSE3.SA": 45.00,
+    "DIRR3.SA": 14.50,
+    "WIZC3.SA": 9.00,
+    "ITSA4.SA": 11.10,
     "GARE11.SA": 8.10, 
     "MXRF11.SA": 9.70,
     "GGRC11.SA": 9.85, 
-    "CMIG4.SA": 10.60, 
-    "CURY3.SA": 32.50, 
-    "DIRR3.SA": 13.70  
+    "VALE3.SA": 76.00,
+    "EGIE3.SA": 24.67,
+    "PETR4.SA": 35.50,   
+    "TAEE11.SA": 35.00,
+    "CPLE3.SA": 14.00, 
+    "VIVT3.SA": 31.50, 
+    "TRPL4.SA": 23.50, 
+    "CURY3.SA": 32.50
 }
 
 def enviar_mensagem_telegram(mensagem):
