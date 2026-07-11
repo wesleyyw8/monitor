@@ -1,3 +1,5 @@
+import contextlib
+import io
 import math
 import os
 import requests
@@ -23,24 +25,25 @@ TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN") or os.getenv("TELEGRAM_ID")
 CHAT_ID = os.getenv("TELEGRAM_CHAT_ID") or os.getenv("CHAT_ID")
 
 # BANCO DE DADOS
-# Para ações: adicionado o "teto_max" para travar distorções das fórmulas
 CARTEIRA_DADOS = {
     # Ações da sua carteira e radar
     "BBAS3.SA": {"tipo": "acao", "lpa": 2.47, "vpa": 33.26, "div12m": 1.75, "teto_max": 19.60},
-    "CMIG4.SA": {"tipo": "acao", "lpa": 1.63, "vpa": 10.12, "div12m": 0.98, "teto_max": 10.60},
-    "VALE3.SA": {"tipo": "acao", "lpa": 3.51, "vpa": 43.07, "div12m": 5.48, "teto_max": 77.00},
-    "PETR4.SA": {"tipo": "acao", "lpa": 5.80, "vpa": 31.20, "div12m": 4.12, "teto_max": 35.50},
+    "BBDC4.SA": {"tipo": "acao", "lpa": 1.45, "vpa": 16.50, "div12m": 0.70, "teto_max": 14.50, "ignorar_formulas": True},  
     "BBSE3.SA": {"tipo": "acao", "lpa": 4.73, "vpa": 6.51, "div12m": 4.49, "teto_max": 35.00},
-    "DIRR3.SA": {"tipo": "acao", "lpa": 1.15, "vpa": 11.29, "div12m": 1.12, "teto_max": 13.70},
-    "WIZC3.SA": {"tipo": "acao", "lpa": 0.73, "vpa": 6.52, "div12m": 0.69, "teto_max": 9.00},
-    "ITSA4.SA": {"tipo": "acao", "lpa": 1.34, "vpa": 9.20, "div12m": 0.61, "teto_max": 11.10},
-    "SAPR4.SA": {"tipo": "acao", "lpa": 0.81, "vpa": 8.40, "div12m": 0.57, "teto_max": 5.10},
-    "EGIE3.SA": {"tipo": "acao", "lpa": 2.26, "vpa": 11.98, "div12m": 1.47, "teto_max": 33.55},
-    "TAEE11.SA": {"tipo": "acao", "lpa": 2.85, "vpa": 21.10, "div12m": 2.10, "teto_max": 35.00},
+    "CMIG4.SA": {"tipo": "acao", "lpa": 1.63, "vpa": 10.12, "div12m": 0.98, "teto_max": 10.60},
     "CPLE3.SA": {"tipo": "acao", "lpa": 0.95, "vpa": 11.40, "div12m": 0.65, "teto_max": 14.00},
-    "VIVT3.SA": {"tipo": "acao", "lpa": 3.10, "vpa": 41.50, "div12m": 2.30, "teto_max": 31.50},
-    "TRPL4.SA": {"tipo": "acao", "lpa": 2.45, "vpa": 24.10, "div12m": 1.60, "teto_max": 23.50},
     "CURY3.SA": {"tipo": "acao", "lpa": 2.10, "vpa": 12.20, "div12m": 1.85, "teto_max": 32.50},
+    "DIRR3.SA": {"tipo": "acao", "lpa": 1.15, "vpa": 11.29, "div12m": 1.12, "teto_max": 13.70},
+    "EGIE3.SA": {"tipo": "acao", "lpa": 2.26, "vpa": 11.98, "div12m": 1.47, "teto_max": 33.55},
+    "ITSA4.SA": {"tipo": "acao", "lpa": 1.34, "vpa": 9.20, "div12m": 0.61, "teto_max": 11.10},
+    "PETR4.SA": {"tipo": "acao", "lpa": 5.80, "vpa": 31.20, "div12m": 4.12, "teto_max": 35.50},
+    "PRIO3.SA": {"tipo": "acao", "lpa": 4.50, "vpa": 19.20, "div12m": 2.50, "teto_max": 41.60},
+    "SAPR4.SA": {"tipo": "acao", "lpa": 0.81, "vpa": 8.40, "div12m": 0.57, "teto_max": 5.10},
+    "TAEE11.SA": {"tipo": "acao", "lpa": 2.85, "vpa": 21.10, "div12m": 2.10, "teto_max": 35.00},
+    "TRPL4.SA": {"tipo": "acao", "lpa": 2.45, "vpa": 24.10, "div12m": 1.60, "teto_max": 23.50},
+    "VALE3.SA": {"tipo": "acao", "lpa": 3.51, "vpa": 43.07, "div12m": 5.48, "teto_max": 77.00},
+    "VIVT3.SA": {"tipo": "acao", "lpa": 3.10, "vpa": 41.50, "div12m": 2.30, "teto_max": 31.50},
+    "WIZC3.SA": {"tipo": "acao", "lpa": 0.73, "vpa": 6.52, "div12m": 0.69, "teto_max": 9.00},
 
     # Seus FIIs (Mantidos com teto fixo patrimonial)
     "GARE11.SA": {"tipo": "fii", "teto_fixo": 8.10},
@@ -62,47 +65,99 @@ def enviar_mensagem_telegram(mensagem):
     except Exception as e:
         print(f"Erro de conexão: {e}")
 
+def buscar_dados_mercado(tickers):
+    tentativas = [
+        {"period": "1d", "interval": "5m"},
+        {"period": "5d", "interval": "1d"},
+        {"period": "1mo", "interval": "1d"},
+    ]
+
+    for tentativa in tentativas:
+        with contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.StringIO()):
+            dados = yf.download(tickers, progress=False, **tentativa)
+        if not dados.empty:
+            return dados
+    return None
+
+def obter_ultimo_preco(dados_mercado, ticker):
+    if dados_mercado is None or dados_mercado.empty:
+        return None
+
+    try:
+        fechamento = dados_mercado["Close"][ticker]
+    except KeyError:
+        try:
+            fechamento = dados_mercado["Close"]
+        except KeyError:
+            return None
+
+    fechamento = fechamento.dropna()
+    if fechamento.empty:
+        return None
+
+    return round(float(fechamento.iloc[-1]), 2)
+
 def monitorar_mercado():
     print("Iniciando varredura inteligente de mercado com travas...")
     alertas_disparados = []
     
     tickers_symbols = list(CARTEIRA_DADOS.keys())
-    dados_mercado = yf.download(tickers_symbols, period="1d", interval="1m", progress=False)
+    dados_mercado = buscar_dados_mercado(tickers_symbols)
     
     for ticker, info in CARTEIRA_DADOS.items():
         try:
-            preco_atual = dados_mercado['Close'][ticker].iloc[-1]
-            preco_atual = round(float(preco_atual), 2)
+            preco_atual = obter_ultimo_preco(dados_mercado, ticker)
             
-            # Lógica de cálculo do Preço-Teto
+            # RECONEXÃO INDIVIDUAL E TRATAMENTO SEM ".SA" SE FALHAR (Solução definitiva TRPL4)
+            if preco_atual is None:
+                dados_individuais = buscar_dados_mercado([ticker])
+                preco_atual = obter_ultimo_preco(dados_individuais, ticker)
+                
+            if preco_atual is None:
+                ticker_puro = ticker.replace(".SA", "")
+                dados_individuais = buscar_dados_mercado([ticker_puro])
+                preco_atual = obter_ultimo_preco(dados_individuais, ticker_puro)
+                
+            if preco_atual is None:
+                print(f"{ticker}: sem preço disponível no Yahoo Finance.")
+                continue
+            
+            # Lógica de cálculo e identificação do método
             if info["tipo"] == "acao":
-                # 1. Fórmula de Graham
-                if info["lpa"] > 0 and info["vpa"] > 0:
-                    graham = math.sqrt(22.5 * info["lpa"] * info["vpa"])
-                else:
-                    graham = 0
-                
-                # 2. Método de Bazin
-                bazin = info["div12m"] / 0.06
-                
-                # Pega o menor valor calculado pelas fórmulas
-                teto_calculado = min(graham, bazin)
-                
-                # TRAVA DE SEGURANÇA: Limita o preço final ao "teto_max" definido por você
-                preco_teto = round(min(teto_calculado, info["teto_max"]), 2)
-                
-                # Define a string de exibição do método correspondente
-                if preco_teto == info["teto_max"]:
+                if info.get("ignorar_formulas", False):
+                    preco_teto = info["teto_max"]
                     metodo_usado = "Trava Manual"
                 else:
-                    metodo_usado = "Graham" if graham < bazin else "Bazin"
+                    # Calcula Graham
+                    graham = math.sqrt(22.5 * info["lpa"] * info["vpa"]) if info["lpa"] > 0 and info["vpa"] > 0 else 0
+                    # Calcula Bazin
+                    bazin = info["div12m"] / 0.06
+                    
+                    teto_calculado = min(graham, bazin)
+                    preco_teto = round(min(teto_calculado, info["teto_max"]), 2)
+                    
+                    # Identifica por quais métodos passou comparando com o preço atual
+                    if preco_teto == info["teto_max"] and preco_atual <= info["teto_max"] and preco_atual > teto_calculado:
+                        metodo_usado = "Trava Manual"
+                    else:
+                        passou_graham = preco_atual <= graham
+                        passou_bazin = preco_atual <= bazin
+                        
+                        if passou_graham and passou_bazin:
+                            metodo_usado = "Graham e Bazin"
+                        elif passou_graham:
+                            metodo_usado = "Graham"
+                        elif passou_bazin:
+                            metodo_usado = "Bazin"
+                        else:
+                            metodo_usado = "Nenhum (Preço Esticado)"
             else:
-                # Se for FII, usa direto o teto patrimonial fixo
-                preco_teto = info["teto_fixo"]
+                preco_teto = info["teto_fii"] if "teto_fii" in info else info.get("teto_fixo", 0)
                 metodo_usado = "P/VP FII"
 
             print(f"{ticker}: Atual R$ {preco_atual} | Teto Final R$ {preco_teto} ({metodo_usado})")
             
+            # Condição de disparo de alerta: preço atual precisa ser menor ou igual ao teto final real
             if preco_atual <= preco_teto:
                 ticker_limpo = ticker.replace(".SA", "")
                 alertas_disparados.append(
