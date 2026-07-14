@@ -58,7 +58,7 @@ def enviar_mensagem_telegram(mensagem):
         return
 
     url = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage"
-    payload = {"chat_id": CHAT_ID, "text": message, "parse_mode": "Markdown"}
+    payload = {"chat_id": CHAT_ID, "text": mensagem, "parse_mode": "Markdown"}
     try:
         response = requests.post(url, json=payload)
         if response.status_code != 200:
