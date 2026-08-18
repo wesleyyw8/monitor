@@ -29,7 +29,7 @@ CHAT_ID = os.getenv("TELEGRAM_CHAT_ID") or os.getenv("CHAT_ID")
 CARTEIRA_DADOS = {
     # Ações da sua carteira e radar
     "BBAS3.SA": {"tipo": "acao", "teto_max": 19.60},
-    "BBDC4.SA": {"tipo": "acao", "teto_max": 14.50, "ignorar_formulas": True},  
+    "BBDC4.SA": {"tipo": "acao", "teto_max": 14.50},  
     "BBSE3.SA": {"tipo": "acao", "teto_max": 35.00},
     "CMIG4.SA": {"tipo": "acao", "teto_max": 10.60},
     "CPLE3.SA": {"tipo": "acao", "teto_max": 14.00},
@@ -45,7 +45,9 @@ CARTEIRA_DADOS = {
     "VALE3.SA": {"tipo": "acao", "teto_max": 77.00},
     "VIVT3.SA": {"tipo": "acao", "teto_max": 31.50},
     "WIZC3.SA": {"tipo": "acao", "teto_max": 9.00},
-
+    "AXIA3.SA": {"tipo": "acao", "teto_max": 99.00},
+    "KLBN11.SA": {"tipo": "acao", "teto_max": 22.50},
+    "CSMG3.SA": {"tipo": "acao", "teto_max": 23.50},
     # Seus FIIs (Mantidos com teto fixo patrimonial)
     "GARE11.SA": {"tipo": "fii", "teto_fixo": 8.10},
     "MXRF11.SA": {"tipo": "fii", "teto_fixo": 9.70},
