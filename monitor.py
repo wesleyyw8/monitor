@@ -30,16 +30,12 @@ CARTEIRA_DADOS = {
     # Ações da sua carteira e radar
     "UNIP6.SA": {"tipo": "acao", "teto_max": 85.00},  # Adicionada (Unipar - Setor Químico/Barsi)
     "KLBN4.SA": {"tipo": "acao", "teto_max": 5.20},   # Adicionada (Klabin PN - Preferida por valor unitário)
-    "AESB3.SA": {"tipo": "acao", "teto_max": 12.00},  # Adicionada (AES Brasil - Energia)
     "NEOE3.SA": {"tipo": "acao", "teto_max": 22.00},  # Adicionada (Neoenergia - Energia)
     "TASA4.SA": {"tipo": "acao", "teto_max": 15.00},  # Adicionada (Taurus - Indústria/Proventos)
     "AURE3.SA": {"tipo": "acao", "teto_max": 14.50},  # Adicionada (Auren Energia - Energia)
     "SESP3.SA": {"tipo": "acao", "teto_max": 6.50},   # Adicionada (Sanepar ON - Saneamento)
 
-    # --- NOVAS ADIÇÕES (BANCOS) ---
-    "BRSR6.SA": {"tipo": "acao", "teto_max": 16.50},  # Adicionada (Banrisul)
-    "ABCB4.SA": {"tipo": "acao", "teto_max": 25.00},  # Adicionada (Banco ABC Brasil)
-    "SANB11.SA": {"tipo": "acao", "teto_max": 31.00}, # Adicionada (Santander Brasil)
+    
     "PINE4.SA":  {"tipo": "acao", "teto_max": 5.50},   # Adicionada (Banco Pine)
     "BMGB4.SA":  {"tipo": "acao", "teto_max": 4.20},   # Adicionada (Banco BMG),
     "BBAS3.SA": {"tipo": "acao", "teto_max": 19.60},
@@ -49,24 +45,17 @@ CARTEIRA_DADOS = {
     "CPLE3.SA": {"tipo": "acao", "teto_max": 14.00},
     "CURY3.SA": {"tipo": "acao", "teto_max": 32.50},
     "DIRR3.SA": {"tipo": "acao", "teto_max": 13.70},
-    "EGIE3.SA": {"tipo": "acao", "teto_max": 33.55},
     "ITSA4.SA": {"tipo": "acao", "teto_max": 11.10},
     "PETR4.SA": {"tipo": "acao", "teto_max": 35.50},
     "PRIO3.SA": {"tipo": "acao", "teto_max": 41.60},
     "SAPR4.SA": {"tipo": "acao", "teto_max": 5.10},
     "TAEE11.SA": {"tipo": "acao", "teto_max": 35.00},
-    "TRPL4.SA": {"tipo": "acao", "teto_max": 23.50},
+    
     "VALE3.SA": {"tipo": "acao", "teto_max": 77.00},
     "VIVT3.SA": {"tipo": "acao", "teto_max": 31.50},
     "WIZC3.SA": {"tipo": "acao", "teto_max": 9.00},
-    "AXIA3.SA": {"tipo": "acao", "teto_max": 99.00},
     "KLBN11.SA": {"tipo": "acao", "teto_max": 22.50},
     "CSMG3.SA": {"tipo": "acao", "teto_max": 23.50},
-    "BRSR6.SA": {"tipo": "acao", "teto_max": 16.50},  # Banrisul (Adicionado)
-    "ABCB4.SA": {"tipo": "acao", "teto_max": 25.00},  # Banco ABC Brasil (Adicionado)
-    "SANB11.SA": {"tipo": "acao", "teto_max": 31.00}, # Banco Santander Brasil (Adicionado)
-    "BPAC11.SA": {"tipo": "acao", "teto_max": 38.00}, # BTG Pactual (Adicionado)
-    "PINE4.SA":  {"tipo": "acao", "teto_max": 5.50},   # Banco Pine (Adicionado)
     "BMGB4.SA":  {"tipo": "acao", "teto_max": 4.20},   # Banco BMG (Adicionado)
     # Seus FIIs (Mantidos com teto fixo patrimonial)
     "GARE11.SA": {"tipo": "fii", "teto_fixo": 8.10},
